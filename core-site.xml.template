@@ -3,4 +3,8 @@
           <name>fs.defaultFS</name>
           <value>hdfs://HOSTNAME:9000</value>
       </property>
+      <property>
+          <name>hadoop.tmp.dir</name>
+          <value>file://TMP_DIR/data</value>
+      </property>
   </configuration>

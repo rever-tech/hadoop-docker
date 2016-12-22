@@ -12,6 +12,18 @@ cd $HADOOP_PREFIX/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; 
 # altering the core-site configuration
 sed s/HOSTNAME/$HOSTNAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
 
+# altering TMP_DIR
+TMP_DIR=${TMP_DIR:-/opt/hadoop}
+if [[ ! -d $TMP_DIR ]]; then
+	mkdir -p $TMP_DIR
+fi
+sed -i 's/TMP_DIR/$TMP_DIR/g' /usr/local/hadoop/etc/hadoop/core-site.xml
+
+# Formating name node if data dir is fresh
+if [[ ! -f $TMP_DIR/formated ]]; then
+	$HADOOP_PREFIX/bin/hdfs namenode -format
+	touch $TMP_DIR/formated
+fi
 
 service sshd start
 $HADOOP_PREFIX/sbin/start-dfs.sh
