@@ -10,12 +10,16 @@ rm /tmp/*.pid
 cd $HADOOP_PREFIX/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; curl -LO $cp ; done; cd -
 
 # altering the core-site configuration
-sed s/HOSTNAME/$HOSTNAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
+if [[ "x$MASTER" == "x" ]]; then
+	MASTER=$HOSTNAME
+fi
+
+sed -i "s/MASTER/$MASTER/g" /usr/local/hadoop/etc/hadoop/core-site.xml
 
 # altering TMP_DIR
 TMP_DIR=${TMP_DIR:-/opt/hadoop}
-if [[ ! -d $TMP_DIR/data ]]; then
-	mkdir -p $TMP_DIR/data
+if [[ ! -d $TMP_DIR ]]; then
+	mkdir -p $TMP_DIR
 fi
 sed -i "s;TMP_DIR;$TMP_DIR;g" /usr/local/hadoop/etc/hadoop/core-site.xml
 
