@@ -5,6 +5,6 @@
       </property>
       <property>
           <name>hadoop.tmp.dir</name>
-          <value>file://TMP_DIR/data</value>
+          <value>TMP_DIR</value>
       </property>
   </configuration>
