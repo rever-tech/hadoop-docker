@@ -16,6 +16,7 @@ if [[ "x$MASTER" == "x" ]]; then
 fi
 
 sed -i "s/MASTER/$MASTER/g" /usr/local/hadoop/etc/hadoop/core-site.xml
+sed -i "s/MASTER/$MASTER/g" /usr/local/hadoop/etc/hadoop/yarn-site.xml
 
 # altering TMP_DIR
 TMP_DIR=${TMP_DIR:-/opt/hadoop}
