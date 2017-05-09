@@ -36,12 +36,9 @@ RUN curl -s http://mirrors.digipower.vn/apache/hadoop/common/hadoop-2.6.4/hadoop
 RUN cd /usr/local && ln -s ./hadoop-2.6.4 hadoop
 
 # download native support
-# RUN mkdir -p /usr/local/hadoop/lib/native/
 RUN rm -rf  /usr/local/hadoop/lib/native
-ADD native /usr/local/hadoop/lib/native
-
-# RUN wget https://dl.bintray.com/sequenceiq/sequenceiq-bin/:hadoop-native-64-2.6.0.tar | tar -x -C /usr/local/hadoop/lib/native/
-
+RUN mkdir -p /usr/local/hadoop/lib/native/
+RUN curl -Ls http://dl.bintray.com/sequenceiq/sequenceiq-bin/hadoop-native-64-2.6.0.tar | tar -x -C /usr/local/hadoop/lib/native/
 
 ENV HADOOP_PREFIX /usr/local/hadoop
 ENV HADOOP_COMMON_HOME /usr/local/hadoop
@@ -66,24 +63,9 @@ ADD hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml
 ADD mapred-site.xml $HADOOP_PREFIX/etc/hadoop/mapred-site.xml
 ADD yarn-site.xml $HADOOP_PREFIX/etc/hadoop/yarn-site.xml
 
-#Moved into bootstrap
-#RUN $HADOOP_PREFIX/bin/hdfs namenode -format
-
-# # fixing the libhadoop.so like a boss
-# RUN rm -rf /usr/local/hadoop/lib/native
-# RUN mv /tmp/native /usr/local/hadoop/lib
-
 ADD ssh_config /root/.ssh/config
 RUN chmod 600 /root/.ssh/config
 RUN chown root:root /root/.ssh/config
-
-# # installing supervisord
-# RUN yum install -y python-setuptools
-# RUN easy_install pip
-# RUN curl https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -o - | python
-# RUN pip install supervisor
-#
-# ADD supervisord.conf /etc/supervisord.conf
 
 ADD bootstrap.sh /etc/bootstrap.sh
 RUN chown root:root /etc/bootstrap.sh
